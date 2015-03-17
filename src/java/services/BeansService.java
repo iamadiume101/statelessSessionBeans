@@ -6,7 +6,9 @@
 
 package services;
 
+import beans.LoggingBean;
 import beans.LoginBean;
+import beans.MOTDBean;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -30,11 +32,19 @@ public class BeansService implements Serializable {
    @EJB 
    LoginBean login;
    
+   @EJB 
+   LoggingBean log;
+   
+   @EJB 
+   MOTDBean motd;
+   
    @GET
    @Produces("application/json")
    public Response doGet() {
         JsonObject json = Json.createObjectBuilder()
-                .add("name", login.getName()).build();
+                .add("name", login.getName())
+                 .add("motd", motd.getMotd()).build();
+        log.log(json.toString());
         return Response.ok(json).build();
     }
 
@@ -43,6 +53,8 @@ public class BeansService implements Serializable {
    @Consumes("application/json") 
    public Response doPost(JsonObject json) {
        login.setName(json.getString("name"));
+       log.log(json.toString());
+       motd.setMotd(json.getString("motd"));
        return Response.ok(json).build();
    }
       
