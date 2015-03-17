@@ -49,7 +49,7 @@ public class BeansService implements Serializable {
     }
 
    
-   @POST//
+   @POST
    @Consumes("application/json") 
    public Response doPost(JsonObject json) {
        login.setName(json.getString("name"));
